@@ -1,1 +1,279 @@
 
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#111111">
+<title>رداد SKY</title>
+<style>
+:root{--bg:#111;--card:#252525;--line:#373737;--orange:#ff7052;--text:#fff;--muted:#aaa}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif;padding-bottom:90px}
+button,input,select{font:inherit}
+button{cursor:pointer}
+header{position:sticky;top:0;z-index:4;background:#151515;border-bottom:1px solid #333;display:flex;align-items:center;justify-content:space-between;padding:15px}
+.brand{font-size:23px;font-weight:bold;color:var(--orange)}
+.brand small{display:block;color:#aaa;font-size:11px;margin-top:5px}
+.circle{width:43px;height:43px;border-radius:50%;border:1px solid #393939;background:#222;color:white;font-size:20px}
+.page{display:none;padding:16px;max-width:650px;margin:auto}
+.page.active{display:block}
+.card{background:var(--card);border-radius:30px;padding:19px;margin:17px 0}
+.balance{background:linear-gradient(145deg,#b82e17,#ff7052);border-radius:38px;text-align:center;padding:25px 16px;margin-bottom:22px}
+.balance-title{font-size:21px}
+.points{font-size:43px;font-weight:bold;margin:8px}
+.coin{font-size:22px}
+.money{border:1px solid #ffffff45;border-radius:35px;padding:12px;margin-top:17px;display:inline-block}
+.actions{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:24px}
+.action{aspect-ratio:1;border-radius:50%;border:1px solid #444;background:#282828;color:white;font-size:24px}
+.banner{background:linear-gradient(110deg,#792052,#9b376f);border-radius:22px;padding:24px;margin:20px 0;cursor:pointer}
+.banner h2{margin:0 0 9px}
+.row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.muted{color:var(--muted)}
+.progress{height:9px;border-radius:10px;background:#555;overflow:hidden;margin:16px 0}
+.progress div{height:100%;background:var(--orange);width:0}
+.tabs{display:flex;background:#252525;border-radius:25px;padding:5px;margin:18px 0}
+.tabs button{flex:1;background:transparent;color:#aaa;border:0;padding:12px;border-radius:22px}
+.tabs button.selected{background:#414047;color:white}
+.plan{position:relative;overflow:hidden;background:linear-gradient(135deg,#292929,#171717);border:1px solid #383838;border-radius:35px;padding:18px;margin:17px 0}
+.plan h2{margin:0;font-size:27px}
+.price{background:#666;padding:10px 13px;border-radius:22px;font-size:20px;font-weight:bold}
+.planet{font-size:62px;margin:8px 0}
+.tag{display:inline-block;border:1px solid #a43b68;background:#3b1d2d;border-radius:25px;padding:8px 10px;font-size:13px;margin:4px 0}
+.plan p{line-height:1.9;color:#ddd}
+.primary{background:linear-gradient(110deg,#ff7958,#e94b32);border:0;border-radius:25px;padding:14px;color:white;width:100%;margin-top:12px;font-weight:bold}
+.secondary{background:#333;color:white;border:1px solid #555;border-radius:14px;padding:11px}
+input,select{display:block;width:100%;background:#1b1b1b;color:white;border:1px solid #484848;border-radius:13px;padding:13px;margin:8px 0}
+label{display:block;color:#ccc;margin-top:13px}
+.bottom{position:fixed;bottom:0;left:0;right:0;z-index:5;display:flex;justify-content:space-around;background:#151515;border:1px solid #333;border-radius:24px 24px 0 0;padding:8px 3px max(10px,env(safe-area-inset-bottom))}
+.bottom button{flex:1;background:transparent;border:0;color:#999;font-size:12px;padding:6px 0}
+.bottom button span{display:block;font-size:24px;margin-bottom:5px}
+.bottom button.active{color:var(--orange)}
+.item{background:#303030;padding:14px;border-radius:15px;margin:9px 0}
+.small{font-size:12px;line-height:1.8;color:#aaa}
+hr{border:0;border-top:1px solid #444;margin:18px 0}
+</style>
+</head>
+<body>
+<header>
+<button class="circle" onclick="go('profile')">☰</button>
+<div class="brand">☁ رداد SKY<small>شبكة المملكة الردادية</small></div>
+<button class="circle" onclick="go('notifications')">♧</button>
+</header>
+
+<section id="home" class="page active">
+<div class="balance">
+<div class="balance-title">رصيدك</div>
+<div class="points"><span id="points">0</span> <span class="coin">🪙</span></div>
+<div>نقطة</div>
+<div class="money">رصيد النقاط الافتراضي</div>
+<div class="actions">
+<button class="action" onclick="go('gift')">🎁</button>
+<button class="action" onclick="go('plans')">♙</button>
+<button class="action" onclick="go('calls')">↙</button>
+<button class="action" onclick="go('transfer')">↗</button>
+</div>
+</div>
+<div class="banner" onclick="go('recharge')"><h2>اشحن عبر مصادري 🎁</h2><div>إدارة رصيدك داخل رداد SKY</div></div>
+<div class="card">
+<div class="row"><h2>🌍 الأرض</h2><span id="status" class="muted">لا توجد باقة</span></div>
+<div class="row"><b>استخدام البيانات</b><span id="usageText">0 / 0 GB</span></div>
+<div class="progress"><div id="usageBar"></div></div>
+<div id="daysText" class="muted">اشترك بباقة لعرض الصلاحية</div>
+<div class="row" style="margin-top:15px"><span>☎ <b id="minutes">0</b> دقيقة</span><span>✉ <b id="messages">0</b> رسالة</span></div>
+</div>
+<div class="card"><h3>مرحبًا بك في رداد SKY 👑</h3><p class="muted">شبكة افتراضية لإدارة الباقات والنقاط والحسابات.</p><button class="primary" onclick="go('plans')">استعراض الباقات</button></div>
+</section>
+
+<section id="plans" class="page">
+<h1>الخطط</h1>
+<div class="row"><button class="secondary" onclick="go('gift')">🎁 هدية</button><label style="margin:0"><input id="autoRenew" type="checkbox" style="display:inline;width:auto"> التجديد التلقائي</label></div>
+<div class="tabs"><button id="plansTab" class="selected" onclick="tab('plans')">الخطط</button><button id="offersTab" onclick="tab('offers')">عروض</button></div>
+<div id="plansList"></div>
+<div id="offersList" style="display:none"><div class="card"><h2>🎉 عروض رداد SKY</h2><p>تابع عروض الباقات داخل التطبيق.</p><button class="primary" onclick="tab('plans')">مشاهدة الخطط</button></div></div>
+</section>
+
+<section id="calls" class="page">
+<h1>المكالمات</h1>
+<div class="card"><h3>البحث عن حساب</h3><input id="searchId" placeholder="رقم حساب المستخدم"><button class="primary" onclick="searchUser()">بحث</button><div id="searchResult" class="muted" style="margin-top:12px"></div></div>
+<div class="card"><h3>☎ المكالمات</h3><p class="muted">تتطلب المكالمات الحقيقية خدمة اتصال وخادمًا مشتركًا.</p><button class="secondary" onclick="callNotice('صوتية')">مكالمة صوتية</button> <button class="secondary" onclick="callNotice('مرئية')">صوت وصورة</button><hr><h3>سجل المكالمات</h3><div id="callLog" class="muted">لا توجد مكالمات.</div></div>
+</section>
+
+<section id="transfer" class="page">
+<h1>تحويل النقاط ↗</h1>
+<div class="card"><label>رقم حساب المستلم</label><input id="transferId" placeholder="رقم الحساب"><label>عدد النقاط</label><input id="transferAmount" type="number" min="1" placeholder="عدد النقاط"><button class="primary" onclick="transfer()">تحويل النقاط</button><p class="small">التحويل تجريبي ومحلي، ولا يصل إلى مستخدم على جهاز آخر.</p></div>
+</section>
+
+<section id="gift" class="page">
+<h1>الهدايا 🎁</h1>
+<div class="card"><p>أرسل هدية تجريبية إلى حسابك الحالي.</p><input id="giftAmount" type="number" min="1" placeholder="عدد النقاط"><button class="primary" onclick="gift()">إرسال الهدية</button></div>
+</section>
+
+<section id="recharge" class="page">
+<h1>إعادة الشحن</h1>
+<div class="card"><h3>إضافة رصيد تجريبي</h3><p class="muted">لا توجد مدفوعات حقيقية. هذه ميزة محلية للتجربة فقط.</p><input id="rechargeAmount" type="number" min="1" placeholder="عدد النقاط"><button class="primary" onclick="recharge()">إضافة نقاط تجريبية</button></div>
+</section>
+
+<section id="profile" class="page">
+<h1>الحساب الشخصي</h1>
+<div class="card">
+<label>الاسم الكامل</label><input id="fullName" placeholder="الاسم الكامل">
+<label>الرتبة</label><select id="rank"><option>جندي سابق</option><option>جندي في الجيش التحرير الردادي</option><option>مراسل</option><option>ملازم</option><option>ملازم أول</option><option>نقيب</option><option>عقيد</option></select>
+<label>المحافظة</label><select id="province"><option>السهل الردادي</option><option>نهر الرديد</option><option>الجبال الثلجية</option><option>المحافظة الشرقية</option></select>
+<label>رقم الحساب</label><input id="accountId" readonly>
+<button class="primary" onclick="saveProfile()">حفظ الملف الشخصي</button>
+<hr><button class="secondary" onclick="logout()">تسجيل الخروج من هذا الجهاز</button>
+</div>
+<div class="card"><h3>إنشاء حساب أو تسجيل الدخول</h3><label>الاسم الكامل</label><input id="authName" placeholder="الاسم الكامل"><label>كلمة المرور</label><input id="authPass" type="password" placeholder="كلمة المرور"><button class="primary" onclick="register()">إنشاء حساب</button><button class="secondary" style="width:100%;margin-top:10px" onclick="login()">تسجيل الدخول</button><p class="small">الحسابات هنا محفوظة محليًا على الجهاز فقط، وليست نظام مصادقة آمنًا.</p></div>
+</section>
+
+<section id="notifications" class="page"><h1>الإشعارات</h1><div class="card" id="notificationsList">لا توجد إشعارات جديدة.</div></section>
+
+<section id="settings" class="page"><h1>الإعدادات</h1><div class="card"><button class="secondary" onclick="toggleTheme()">تبديل مظهر التطبيق</button><hr><button class="secondary" onclick="resetData()">إعادة ضبط البيانات المحلية</button><p class="small">إعادة الضبط تحذف البيانات التجريبية من هذا المتصفح.</p></div></section>
+
+<nav class="bottom">
+<button data-page="recharge" onclick="go('recharge')"><span>🎁</span>إعادة الشحن</button>
+<button data-page="home" class="active" onclick="go('home')"><span>⌂</span>الرئيسية</button>
+<button data-page="plans" onclick="go('plans')"><span>▣</span>الخطط</button>
+</nav>
+
+<script>
+const KEY='raddad_sky_demo_v1';
+const catalog=[
+{name:'الزهرة',cost:66,gb:40,min:100,msg:100,emoji:'🪐'},
+{name:'المريخ',cost:36,gb:20,min:75,msg:75,emoji:'🔴'},
+{name:'الشمس',cost:30,gb:15,min:50,msg:50,emoji:'☀️'}
+];
+let data;
+function load(){
+try{data=JSON.parse(localStorage.getItem(KEY))}catch(e){}
+if(!data||typeof data!=='object')data={points:0,user:null,accounts:[],bundle:null,logs:[],usage:0,auto:false,notifications:[]};
+data.points=Number(data.points)||0;
+data.accounts=Array.isArray(data.accounts)?data.accounts:[];
+data.logs=Array.isArray(data.logs)?data.logs:[];
+data.notifications=Array.isArray(data.notifications)?data.notifications:[];
+}
+function save(){localStorage.setItem(KEY,JSON.stringify(data));render()}
+function id(){return 'RS'+Math.random().toString(36).slice(2,9).toUpperCase()}
+function go(name){
+document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id===name));
+document.querySelectorAll('.bottom button').forEach(b=>b.classList.toggle('active',b.dataset.page===name));
+if(name==='profile')fillProfile();
+window.scrollTo(0,0);
+}
+function tab(name){
+document.getElementById('plansList').style.display=name==='plans'?'block':'none';
+document.getElementById('offersList').style.display=name==='offers'?'block':'none';
+document.getElementById('plansTab').classList.toggle('selected',name==='plans');
+document.getElementById('offersTab').classList.toggle('selected',name==='offers');
+}
+function renderPlans(){
+document.getElementById('plansList').innerHTML=catalog.map((p,i)=>`
+<div class="plan"><div class="row"><h2>${p.name}</h2><span class="price">${p.cost} 🪙</span></div>
+<div class="planet">${p.emoji}</div>
+<div><span class="tag">✉ رسائل قصيرة ${p.msg}</span> <span class="tag">☎ دقيقة ${p.min}</span></div>
+<p>احصل على <b>${p.gb} غيغابايت</b><br>باقة صالحة لـ 30 يومًا</p>
+<button class="primary" onclick="buy(${i})">اشترك بالباقة</button></div>`).join('');
+}
+function buy(i){
+const p=catalog[i];
+if(!data.user){alert('أنشئ حسابًا أو سجل الدخول أولًا من صفحة الحساب.');go('profile');return}
+if(data.points<p.cost){alert('رصيدك لا يكفي. تحتاج '+p.cost+' نقطة.');return}
+if(data.bundle&&data.bundle.end>Date.now()&&!confirm('شراء باقة جديدة سيستبدل الباقة الحالية. متابعة؟'))return;
+data.points-=p.cost;
+data.bundle={name:p.name,gb:p.gb,min:p.min,msg:p.msg,used:0,remainingMin:p.min,remainingMsg:p.msg,start:Date.now(),end:Date.now()+30*86400000,auto:document.getElementById('autoRenew').checked};
+data.usage=0;
+data.notifications.unshift('تم تفعيل باقة '+p.name);
+save();alert('تم تفعيل باقة '+p.name+' تجريبيًا لمدة 30 يومًا.');
+go('home');
+}
+function render(){
+document.getElementById('points').textContent=data.points;
+document.getElementById('autoRenew').checked=!!(data.bundle&&data.bundle.auto);
+if(data.bundle&&data.bundle.end<=Date.now()){data.bundle=null;localStorage.setItem(KEY,JSON.stringify(data))}
+const b=data.bundle;
+document.getElementById('status').textContent=b?'باقة '+b.name:'لا توجد باقة';
+document.getElementById('usageText').textContent=b?Math.max(0,b.gb-b.used).toFixed(2)+' / '+b.gb+' GB':'0 / 0 GB';
+document.getElementById('usageBar').style.width=b?Math.min(100,b.used/b.gb*100)+'%':'0%';
+document.getElementById('daysText').textContent=b?'الصلاحية: '+Math.max(0,Math.ceil((b.end-Date.now())/86400000))+' يوم':'اشترك بباقة لعرض الصلاحية';
+document.getElementById('minutes').textContent=b?b.remainingMin:0;
+document.getElementById('messages').textContent=b?b.remainingMsg:0;
+document.getElementById('notificationsList').innerHTML=data.notifications.length?data.notifications.map(n=>'<div class="item">'+escapeHtml(n)+'</div>').join(''):'لا توجد إشعارات جديدة.';
+document.getElementById('callLog').innerHTML=data.logs.length?data.logs.map(x=>'<div class="item">'+escapeHtml(x)+'</div>').join(''):'لا توجد مكالمات.';
+}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function fillProfile(){
+document.getElementById('accountId').value=data.user?data.user.id:'أنشئ حسابًا أولًا';
+if(data.user){document.getElementById('fullName').value=data.user.name;document.getElementById('rank').value=data.user.rank;document.getElementById('province').value=data.user.province}
+}
+function register(){
+const name=document.getElementById('authName').value.trim(),pass=document.getElementById('authPass').value;
+if(name.length<3||pass.length<4){alert('اكتب الاسم الكامل وكلمة مرور من 4 أحرف على الأقل.');return}
+if(data.accounts.some(a=>a.name.toLowerCase()===name.toLowerCase())){alert('هذا الاسم مسجل على هذا الجهاز. استخدم تسجيل الدخول.');return}
+const a={id:id(),name,pass,rank:'جندي سابق',province:'السهل الردادي',points:0};
+data.accounts.push(a);data.user=a;data.points=0;save();fillProfile();alert('تم إنشاء الحساب محليًا. رقمك: '+a.id);
+}
+function login(){
+const name=document.getElementById('authName').value.trim(),pass=document.getElementById('authPass').value;
+const a=data.accounts.find(x=>x.name.toLowerCase()===name.toLowerCase()&&x.pass===pass);
+if(!a){alert('لا يوجد حساب مطابق للاسم وكلمة المرور على هذا الجهاز.');return}
+data.user=a;data.points=a.points||0;data.bundle=a.bundle||null;save();fillProfile();alert('تم تسجيل الدخول.');
+}
+function saveProfile(){
+if(!data.user){alert('أنشئ حسابًا أو سجل الدخول أولًا.');return}
+data.user.name=document.getElementById('fullName').value.trim()||data.user.name;
+data.user.rank=document.getElementById('rank').value;
+data.user.province=document.getElementById('province').value;
+data.user.points=data.points;save();alert('تم حفظ الملف على هذا الجهاز.');
+}
+function logout(){if(!confirm('تسجيل الخروج؟'))return;data.user=null;save();go('home')}
+function recharge(){
+if(!data.user){alert('سجل الدخول أولًا.');return}
+const n=Number(document.getElementById('rechargeAmount').value);
+if(!Number.isInteger(n)||n<=0){alert('أدخل عدد نقاط صحيحًا.');return}
+data.points+=n;data.notifications.unshift('إضافة '+n+' نقطة تجريبية');save();alert('أضيفت النقاط التجريبية.');
+}
+function gift(){
+if(!data.user){alert('سجل الدخول أولًا.');return}
+const n=Number(document.getElementById('giftAmount').value);
+if(!Number.isInteger(n)||n<=0||n>data.points){alert('عدد النقاط غير صحيح أو رصيدك لا يكفي.');return}
+data.notifications.unshift('تم إرسال طلب هدية تجريبي بقيمة '+n+' نقطة إلى حسابك');
+alert('هذه تجربة محلية فقط، ولم يتم تحويل نقاط فعلية.');save();
+}
+function transfer(){
+if(!data.user){alert('سجل الدخول أولًا.');return}
+const target=document.getElementById('transferId').value.trim(),n=Number(document.getElementById('transferAmount').value);
+if(!target||!Number.isInteger(n)||n<=0||n>data.points){alert('تحقق من رقم الحساب وعدد النقاط.');return}
+if(target===data.user.id){alert('لا يمكنك التحويل إلى حسابك نفسه.');return}
+if(!data.accounts.some(a=>a.id===target)){alert('لا يوجد حساب بهذا الرقم على هذا الجهاز.');return}
+alert('التحويل بين الحسابات غير مفعّل بعد. يحتاج خادمًا مشتركًا لمنع التلاعب.'); 
+}
+function searchUser(){
+const q=document.getElementById('searchId').value.trim();
+const a=data.accounts.find(x=>x.id===q);
+document.getElementById('searchResult').textContent=a?'الحساب: '+a.name+' — '+a.rank+' — '+a.province:'لا يوجد حساب مطابق على هذا الجهاز.';
+}
+function callNotice(type){
+if(!data.user){alert('أنشئ حسابًا أو سجل الدخول أولًا.');return}
+if(!data.bundle||data.bundle.end<=Date.now()){alert('يجب تفعيل باقة للاتصال.');return}
+alert('الاتصال '+type+' الحقيقي غير متاح حتى ربط خدمة مكالمات وخادم مشترك.');
+}
+function toggleTheme(){
+const light=document.body.dataset.light!=='yes';
+document.body.dataset.light=light?'yes':'no';
+document.body.style.background=light?'#eee':'#111';
+document.body.style.color=light?'#111':'#fff';
+document.querySelectorAll('.card,.plan').forEach(e=>e.style.background=light?'#fff':'');
+}
+function resetData(){
+if(!confirm('سيتم حذف الحسابات والبيانات التجريبية من هذا المتصفح. هل تتابع؟'))return;
+localStorage.removeItem(KEY);load();save();go('home');
+}
+document.getElementById('autoRenew').addEventListener('change',e=>{
+if(data.bundle){data.bundle.auto=e.target.checked;save()}
+});
+load();renderPlans();render();fillProfile();
+</script>
+</body>
+                                                                               </html>
+                                                                                                                                                          
